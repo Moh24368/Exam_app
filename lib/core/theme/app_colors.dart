@@ -27,6 +27,8 @@ abstract class AppColors {
   static const black90 = Color(0xFF050505);
   static const black100 = Color(0xFF030303);
 
+  static const white = Color(0xFFF9F9F9);
+
   static const gray = Color(0xFF535353);
 
   static const error = Color(0xFFCC1010);
