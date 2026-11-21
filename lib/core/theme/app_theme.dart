@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'app_colors.dart';
 
@@ -17,7 +18,7 @@ abstract class AppTheme {
       onSurface: AppColors.black,
     ),
 
-    appBarTheme: const AppBarTheme(
+    appBarTheme: AppBarTheme(
       backgroundColor: AppColors.white,
       foregroundColor: AppColors.black,
       elevation: 0,
@@ -26,24 +27,25 @@ abstract class AppTheme {
       titleSpacing: 0,
       titleTextStyle: TextStyle(
         color: AppColors.black,
-        fontSize: 20,
+        fontSize: 20.sp,
         fontWeight: FontWeight.w500,
       ),
     ),
 
     inputDecorationTheme: InputDecorationTheme(
+      
       floatingLabelBehavior: FloatingLabelBehavior.always,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-      labelStyle: const TextStyle(color: AppColors.gray, fontSize: 12), 
+      contentPadding:  EdgeInsets.symmetric(horizontal: 8.0.w, vertical: 16.0.h),
+      labelStyle:  TextStyle(color: AppColors.gray, fontSize: 12.sp), 
       floatingLabelStyle: WidgetStateTextStyle.resolveWith(
         (s) => TextStyle(
-          fontSize: 12,
+          fontSize: 16.sp,
           color: s.contains(WidgetState.error) ? AppColors.error : AppColors.gray,
         ),
       ),
       
-      hintStyle: const TextStyle(color: AppColors.gray, fontSize: 14), 
-      errorStyle: const TextStyle(color: AppColors.error, fontSize: 12),
+      hintStyle:  TextStyle(color: AppColors.gray, fontSize: 14.sp), 
+      errorStyle:  TextStyle(color: AppColors.error, fontSize: 12.sp),
       enabledBorder: _outline(AppColors.gray),
       focusedBorder: _outline(AppColors.blue),
       errorBorder: _outline(AppColors.error),
@@ -57,10 +59,11 @@ abstract class AppTheme {
         foregroundColor: AppColors.white,
         disabledBackgroundColor: AppColors.gray,
         disabledForegroundColor: AppColors.white,
-        minimumSize: const Size(double.infinity, 48),
+        minimumSize:  Size(double.infinity, 48.0.h),
+        padding: EdgeInsets.symmetric(vertical: 14.0.h),
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500), 
+        textStyle:  TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500), 
       ),
     ),
 
@@ -68,9 +71,9 @@ abstract class AppTheme {
       style: OutlinedButton.styleFrom(
         foregroundColor: AppColors.blue,
         side: const BorderSide(color: AppColors.blue),
-        minimumSize: const Size(double.infinity, 48),
+        minimumSize:  Size(double.infinity, 48.0.h),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        textStyle:  TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
       ),
     ),
 
@@ -80,7 +83,7 @@ abstract class AppTheme {
         padding: EdgeInsets.zero,
         minimumSize: Size.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        textStyle: const TextStyle(fontSize: 16, decoration: TextDecoration.underline),
+        textStyle:  TextStyle(fontSize: 16.sp, decoration: TextDecoration.underline),
       ),
     ),
 
@@ -90,7 +93,7 @@ abstract class AppTheme {
         (s) => s.contains(WidgetState.selected) ? AppColors.blue : Colors.transparent,
       ),
       checkColor: const WidgetStatePropertyAll(AppColors.white),
-      side: const BorderSide(color: AppColors.blue, width: 1.5),
+      side:  BorderSide(color: AppColors.blue, width: 1.5.w),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
     ),
 
@@ -109,7 +112,7 @@ abstract class AppTheme {
       ),
       labelTextStyle: WidgetStateProperty.resolveWith(
         (s) => TextStyle(
-          fontSize: 12,
+          fontSize: 12.sp,
           color: s.contains(WidgetState.selected) ? AppColors.blue : AppColors.gray,
         ),
       ),

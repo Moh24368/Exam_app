@@ -6,7 +6,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.13.2
+  sdk: ^3.13.1
 
 dependencies:
   flutter:
@@ -16,6 +16,7 @@ dependencies:
   flutter_svg: ^2.4.0
 #Local Storage
   shared_preferences: ^2.5.6
+  flutter_secure_storage: ^11.2.0
 # ====DI=====
   get_it: ^9.3.0
   injectable: ^3.0.0
@@ -30,6 +31,7 @@ dependencies:
   pretty_dio_logger: ^1.4.0
   flutter_bloc: ^9.1.1
 
+  material_ui: ^1.11.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
