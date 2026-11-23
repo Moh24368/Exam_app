@@ -1,5 +1,5 @@
-import 'package:exam/core/api/api_result.dart';
-import 'package:exam/features/auth/domain/use_cases/forgot_password_use_case.dart';
+import 'package:exam/config/network/api_result.dart';
+import 'package:exam/features/auth/domain/usecases/forgot_password_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
