@@ -5,7 +5,6 @@ import 'package:exam/core/theme/ui_strings.dart';
 import 'package:exam/features/auth/presentation/signin/cubit/signin_event.dart';
 import 'package:exam/features/auth/presentation/signin/cubit/signin_state.dart';
 import 'package:exam/features/auth/presentation/signin/cubit/signin_view_model.dart';
-import 'package:exam/features/auth/presentation/widgets/custom_text_form_field.dart';
 import 'package:exam/features/auth/presentation/widgets/dont_have_acc_row.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,12 +22,13 @@ class _SigninScreenState extends State<SigninScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _rememberMe = false;
+  final _rememberMe = ValueNotifier<bool>(false);
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _rememberMe.dispose();
     super.dispose();
   }
 
@@ -39,13 +39,13 @@ class _SigninScreenState extends State<SigninScreen> {
       child: BlocListener<SigninViewModel, SigninState>(
         listener: (context, state) {
           final signinState = state.signinState;
-          if (signinState?.errMsg != null) {
+          if (signinState.errMsg != null) {
             ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(signinState!.errMsg!)));
-          } else if (!signinState!.isLoading && signinState.data != null) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(const SnackBar(content: Text(UiStrings.loginSuccess)));
+                .showSnackBar(SnackBar(content: Text(signinState.errMsg!)));
+          } else if (!signinState.isLoading && signinState.data != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text(UiStrings.loginSuccess)),
+            );
             context.goNamed(PageRoutesName.home);
           }
         },
@@ -69,38 +69,24 @@ class _SigninScreenState extends State<SigninScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(height: 16.h),
-                    SizedBox(
-                      child: CustomTextField(
-                        label: UiStrings.email,
-                        hint: UiStrings.enterEmail,
-                        keyboardType: TextInputType.emailAddress,
-                        controller: _emailController,
-                        validator: (val) {
-                          if (val == null || val.trim().isEmpty) {
-                            return UiStrings.emailValErr;
-                          }
-                          if (!Validations.validateEmail(val.trim())) {
-                            return UiStrings.emailValErr;
-                          }
-                          return null;
-                        },
+                    TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      controller: _emailController,
+                      validator: AppValidators.email,
+                      decoration: InputDecoration(
+                        label: Text(UiStrings.email),
+                        hint: Text(UiStrings.enterEmail),
                       ),
                     ),
                     SizedBox(height: 16.h),
-                    CustomTextField(
-                      label: UiStrings.password,
-                      hint: UiStrings.enterPassword,
-                      isPassword: true,
+                    TextFormField(
                       controller: _passwordController,
-                      validator: (val) {
-                        if (val == null || val.isEmpty) {
-                          return UiStrings.pleaseEnterPassword;
-                        }
-                        if (!Validations.validatePassword(val)) {
-                          return UiStrings.passwordValErr;
-                        }
-                        return null;
-                      },
+                      validator: AppValidators.password,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        label: Text(UiStrings.password),
+                        hint: Text(UiStrings.enterPassword),
+                      ),
                     ),
                     SizedBox(height: 16.h),
                     Row(
@@ -108,18 +94,25 @@ class _SigninScreenState extends State<SigninScreen> {
                         SizedBox(
                           width: 24.w,
                           height: 24.w,
-                          child: Checkbox(
-                            value: _rememberMe,
-                            visualDensity: VisualDensity.compact,
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                            onChanged: (value) {
-                              setState(() => _rememberMe = value ?? false);
+                          child: ValueListenableBuilder<bool>(
+                            valueListenable: _rememberMe,
+                            builder: (context, value, _) {
+                              return Checkbox(
+                                value: value,
+                                visualDensity: VisualDensity.compact,
+                                materialTapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap,
+                                onChanged: (newValue) =>
+                                    _rememberMe.value = newValue ?? false,
+                              );
                             },
                           ),
                         ),
                         SizedBox(width: 11.w),
-                        Text(UiStrings.rememberMe, style: TextStyle(fontSize: 13.sp)),
+                        Text(
+                          UiStrings.rememberMe,
+                          style: TextStyle(fontSize: 13.sp),
+                        ),
                         Spacer(),
                         TextButton(
                           onPressed: () {
@@ -136,7 +129,7 @@ class _SigninScreenState extends State<SigninScreen> {
                     SizedBox(height: 48.h),
                     BlocBuilder<SigninViewModel, SigninState>(
                       builder: (context, state) {
-                        final isLoading = state.signinState?.isLoading ?? false;
+                        final isLoading = state.signinState.isLoading;
 
                         return ElevatedButton(
                           onPressed: isLoading
@@ -150,7 +143,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                     SigninSubmittedEvent(
                                       email: _emailController.text.trim(),
                                       password: _passwordController.text,
-                                      rememberMe: _rememberMe,
+                                      rememberMe: _rememberMe.value,
                                     ),
                                   );
                                 },
@@ -179,4 +172,3 @@ class _SigninScreenState extends State<SigninScreen> {
     );
   }
 }
-

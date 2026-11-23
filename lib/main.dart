@@ -1,14 +1,12 @@
 import 'package:exam/config/di/di.dart';
 import 'package:exam/config/routes/app_router.dart';
-import 'package:exam/config/storage/shared_preferences.dart';
 import 'package:exam/core/theme/app_theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_ui/material_ui.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SharedPreferencesHelper.init();
-  configureDependencies();
+  await configureDependencies();
   runApp(const MyApp());
 }
 

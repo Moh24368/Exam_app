@@ -1,16 +1,12 @@
+import 'package:equatable/equatable.dart';
 import 'package:exam/features/auth/domain/entities/user_entity.dart';
 
-class SigninEntity {
+class SigninEntity extends Equatable {
   final String token;
   final UserEntity user;
 
-  const SigninEntity({
-    required this.token,
-    required this.user,
-  });
+  const SigninEntity({required this.token, required this.user});
 
   @override
-  String toString() {
-    return 'SigninEntity{token: $token, user: $user}';
-  }
+  List<Object?> get props => [token, user];
 }

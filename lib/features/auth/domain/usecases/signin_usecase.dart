@@ -3,7 +3,7 @@ import 'package:exam/features/auth/domain/entities/signin_entity.dart';
 import 'package:exam/features/auth/domain/repositories/auth_repo.dart';
 import 'package:injectable/injectable.dart';
 
-@lazySingleton
+@injectable
 class SigninUsecase {
   final AuthRepo authRepo;
 

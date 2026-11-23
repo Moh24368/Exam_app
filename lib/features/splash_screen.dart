@@ -1,5 +1,6 @@
+import 'package:exam/config/di/di.dart';
 import 'package:exam/config/routes/page_routes_name.dart';
-import 'package:exam/config/storage/shared_preferences.dart';
+import 'package:exam/config/storage/auth_session.dart';
 import 'package:exam/core/constants/app_images.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
@@ -20,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _checkAuth() async {
     final results = await Future.wait([
-      SharedPreferencesHelper.getToken(),
+      getIt<AuthSession>().getToken(),
       Future.delayed(const Duration(seconds: 3)),
     ]);
 
@@ -33,10 +34,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Image.asset(AppImages.profit),
-      ),
-    );
+    return Scaffold(body: Center(child: Image.asset(AppImages.profit)));
   }
 }

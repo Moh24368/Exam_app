@@ -1,4 +1,5 @@
 import 'package:exam/config/base_response/base_response.dart';
+import 'package:exam/config/base_state/base_state.dart';
 import 'package:exam/features/auth/domain/entities/signin_entity.dart';
 import 'package:exam/features/auth/domain/usecases/signin_usecase.dart';
 import 'package:exam/features/auth/presentation/signin/cubit/signin_event.dart';
@@ -30,7 +31,7 @@ class SigninViewModel extends Cubit<SigninState> {
   }) async {
     emit(
       state.copyWith(
-        signinState: state.signinState?.copyWith(isLoading: true, errMsg: null),
+        signinState: const BaseState<SigninEntity>(isLoading: true),
       ),
     );
 
@@ -44,20 +45,13 @@ class SigninViewModel extends Cubit<SigninState> {
       case SuccessBaseResponse<SigninEntity>():
         emit(
           state.copyWith(
-            signinState: state.signinState?.copyWith(
-              isLoading: false,
-              data: apiResult.data,
-              errMsg: null,
-            ),
+            signinState: BaseState<SigninEntity>(data: apiResult.data),
           ),
         );
       case ErrorBaseResponse<SigninEntity>():
         emit(
           state.copyWith(
-            signinState: state.signinState?.copyWith(
-              isLoading: false,
-              errMsg: apiResult.errMessage,
-            ),
+            signinState: BaseState<SigninEntity>(errMsg: apiResult.errMessage),
           ),
         );
     }

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:exam/config/network/api_constant.dart';
-import 'package:exam/config/storage/shared_preferences.dart';
+import 'package:exam/config/storage/auth_session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -8,7 +8,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 @module
 abstract class DioModule {
   @singleton
-  Dio dio() {
+  Dio dio(AuthSession authSession) {
     final dio = Dio(
       BaseOptions(
         baseUrl: ApiConstants.baseUrl,
@@ -21,7 +21,7 @@ abstract class DioModule {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          final token = await SharedPreferencesHelper.getToken();
+          final token = await authSession.getToken();
           if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
           }

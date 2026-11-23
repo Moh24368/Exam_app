@@ -18,7 +18,7 @@ class ErrorBaseResponse<T> extends BaseResponse<T> {
 
   ErrorBaseResponse({Object? errorObj})
     : errMessage = errorObj == null
-          ?' ApiCostant.genericErrorMsg'
+          ? ApiConstants.genericErrorMsg
           : _getErrorMsg(errorObj);
 
   static String _getErrorMsg(Object error) {
@@ -36,7 +36,7 @@ class ErrorBaseResponse<T> extends BaseResponse<T> {
           return _getStatusCodeErrorMsg(statusCode);
 
         default:
-          return' ApiCostant.genericErrorMsg';
+          return ApiConstants.genericErrorMsg;
       }
     }
 

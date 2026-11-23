@@ -1,9 +1,11 @@
-class BaseState<T> {
-  bool isLoading;
-  String? errMsg;
-  T? data;
+import 'package:equatable/equatable.dart';
 
-  BaseState({this.isLoading = false, this.data, this.errMsg});
+class BaseState<T> extends Equatable {
+  final bool isLoading;
+  final String? errMsg;
+  final T? data;
+
+  const BaseState({this.isLoading = false, this.errMsg, this.data});
 
   BaseState<T> copyWith({bool? isLoading, String? errMsg, T? data}) {
     return BaseState<T>(
@@ -12,4 +14,7 @@ class BaseState<T> {
       data: data ?? this.data,
     );
   }
+
+  @override
+  List<Object?> get props => [isLoading, errMsg, data];
 }
