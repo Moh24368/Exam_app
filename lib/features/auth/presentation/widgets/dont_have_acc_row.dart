@@ -1,7 +1,4 @@
-import 'package:exam/config/routes/page_routes_name.dart';
-import 'package:exam/core/theme/ui_strings.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 class DontHaveAccRow extends StatelessWidget {
