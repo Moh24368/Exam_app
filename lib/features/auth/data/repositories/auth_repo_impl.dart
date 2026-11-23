@@ -3,8 +3,10 @@ import 'package:exam/config/base_response/safe_api_call.dart';
 import 'package:exam/config/storage/auth_session.dart';
 import 'package:exam/features/auth/data/datasources/remote/auth_remote_datasources.dart';
 import 'package:exam/features/auth/data/models/request/signin_request_model.dart';
+import 'package:exam/features/auth/data/models/request/signup_request_model.dart';
 import 'package:exam/features/auth/data/models/request/user_data_model.dart';
 import 'package:exam/features/auth/domain/entities/signin_entity.dart';
+import 'package:exam/features/auth/domain/entities/user_entity.dart';
 import 'package:exam/features/auth/domain/repositories/auth_repo.dart';
 import 'package:injectable/injectable.dart';
 
@@ -32,6 +34,33 @@ class AuthRepoImpl implements AuthRepo {
         token: response.token,
         user: response.user.toEntity(),
       );
+    });
+  }
+
+  @override
+  Future<BaseResponse<UserEntity>> signup({
+    required String username,
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String password,
+    required String rePassword,
+    required String phone,
+  }) {
+    return safeApiCall(tag: 'Signup', () async {
+      final response = await remoteDataSource.signup(
+        SignupRequestBody(
+          username: username,
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password,
+          rePassword: rePassword,
+          phone: phone,
+        ),
+      );
+
+      return response.user.toEntity();
     });
   }
 }
