@@ -1,4 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:exam/core/theme/app_sizes.dart';
+import 'package:exam/core/theme/app_text_style.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:pinput/pinput.dart';
 
 import 'app_colors.dart';
 
@@ -24,11 +27,7 @@ abstract class AppTheme {
       scrolledUnderElevation: 0,
       centerTitle: false,
       titleSpacing: 0,
-      titleTextStyle: TextStyle(
-        color: AppColors.black,
-        fontSize: 20,
-        fontWeight: FontWeight.w500,
-      ),
+      titleTextStyle: AppTextStyle.appBarStyle,
     ),
 
     inputDecorationTheme: InputDecorationTheme(
@@ -41,26 +40,25 @@ abstract class AppTheme {
           color: s.contains(WidgetState.error) ? AppColors.error : AppColors.gray,
         ),
       ),
-      
       hintStyle: const TextStyle(color: AppColors.gray, fontSize: 14), 
       errorStyle: const TextStyle(color: AppColors.error, fontSize: 12),
       enabledBorder: _outline(AppColors.gray),
       focusedBorder: _outline(AppColors.blue),
       errorBorder: _outline(AppColors.error),
       focusedErrorBorder: _outline(AppColors.error),
-      border: _outline(AppColors.gray),
+      border: _outline(AppColors.blackBase),
     ),
 
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.blue,
+        backgroundColor: AppColors.blueBase,
         foregroundColor: AppColors.white,
-        disabledBackgroundColor: AppColors.gray,
+        disabledBackgroundColor: AppColors.black30,
         disabledForegroundColor: AppColors.white,
         minimumSize: const Size(double.infinity, 48),
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500), 
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.radiusRound)),
+        textStyle: AppTextStyle.elevatedButtonText,
       ),
     ),
 
@@ -135,7 +133,26 @@ abstract class AppTheme {
   );
 
   static OutlineInputBorder _outline(Color color) => OutlineInputBorder(
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(AppSizes.radiusSm),
         borderSide: BorderSide(color: color),
       );
+
+}
+
+abstract class AppPinTheme {
+  static PinTheme defaultTheme(double width) => PinTheme(
+        width: width,
+        height: AppSizes.otpBoxHeight,
+        textStyle: AppTextStyle.otpDigitStyle,
+        decoration: BoxDecoration(
+          color: AppColors.blue10,
+          borderRadius: BorderRadius.circular(AppSizes.radiusSm),
+        ),
+      );
+
+  static PinTheme focusedTheme(double width) => defaultTheme(width)
+      .copyBorderWith(border: Border.all(color: AppColors.blue));
+
+  static PinTheme errorTheme(double width) => defaultTheme(width)
+      .copyBorderWith(border: Border.all(color: AppColors.error));
 }
