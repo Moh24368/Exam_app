@@ -161,7 +161,11 @@ class _SigninScreenState extends State<SigninScreen> {
                     ),
                     SizedBox(height: 16.h),
                     // don't have an account Row
-                    DontHaveAccRow(),
+                    DontHaveAccRow(
+                      title: UiStrings.dontHaveAccount,
+                      buttonText: UiStrings.signUp,
+                      onPressed: () => context.goNamed(PageRoutesName.signup),
+                    ),
                   ],
                 ),
               ),

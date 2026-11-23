@@ -5,8 +5,15 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 class DontHaveAccRow extends StatelessWidget {
+  final String title;
+  final String buttonText;
+  final VoidCallback onPressed;
+
   const DontHaveAccRow({
     super.key,
+    required this.title,
+    required this.buttonText,
+    required this.onPressed,
   });
 
   @override
@@ -15,16 +22,14 @@ class DontHaveAccRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          UiStrings.dontHaveAccount,
+          title,
           style: TextStyle(fontSize: 16.sp),
         ),
         SizedBox(width: 4.w),
         TextButton(
-          onPressed: () {
-            context.goNamed(PageRoutesName.signup);
-          },
+          onPressed: onPressed,
           child: Text(
-            UiStrings.signUp,
+            buttonText,
             style: TextStyle(fontSize: 16.sp),
           ),
         ),
