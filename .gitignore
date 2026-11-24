@@ -33,6 +33,13 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# Generated Dart files
+*.g.dart
+*.freezed.dart
+
+# Injectable generated dependency injection
+*.config.dart
+
 # Symbolication related
 app.*.symbols
 

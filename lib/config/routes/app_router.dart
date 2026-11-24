@@ -1,6 +1,7 @@
 import 'package:exam/config/routes/app_route_paths.dart';
 import 'package:exam/config/routes/page_routes_name.dart';
 import 'package:exam/features/auth/presentation/signin/screens/signin_screen.dart';
+import 'package:exam/features/auth/presentation/signup/screens/signup_screen.dart';
 import 'package:exam/features/home/presentation/screens/home_screen.dart';
 import 'package:exam/features/splash_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -20,12 +21,16 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const SigninScreen(),
     ),
     GoRoute(
+      name: PageRoutesName.signup,
+      path: PageRoutePaths.signup,
+      builder: (context, state) => const SignupScreen(),
+    ),
+    GoRoute(
       name: PageRoutesName.home,
       path: PageRoutePaths.home,
       builder: (context, state) => const HomeScreen(),
     ),
   ],
-  errorBuilder: (context, state) => Scaffold(
-    body: Center(child: Text('Page not found: ${state.uri}')),
-  ),
+  errorBuilder: (context, state) =>
+      Scaffold(body: Center(child: Text('Page not found: ${state.uri}'))),
 );
