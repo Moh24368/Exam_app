@@ -3,8 +3,11 @@ import 'package:exam/config/base_response/safe_api_call.dart';
 import 'package:exam/config/storage/auth_session.dart';
 import 'package:exam/features/auth/data/datasources/remote/auth_remote_datasources.dart';
 import 'package:exam/features/auth/data/models/request/signin_request_model.dart';
+import 'package:exam/features/auth/data/models/request/signup_request_model.dart';
 import 'package:exam/features/auth/data/models/request/user_data_model.dart';
 import 'package:exam/features/auth/domain/entities/signin_entity.dart';
+import 'package:exam/features/auth/domain/entities/signup_params.dart';
+import 'package:exam/features/auth/domain/entities/user_entity.dart';
 import 'package:exam/features/auth/domain/repositories/auth_repo.dart';
 import 'package:injectable/injectable.dart';
 
@@ -34,4 +37,22 @@ class AuthRepoImpl implements AuthRepo {
       );
     });
   }
+
+@override
+Future<BaseResponse<UserEntity>> signup(SignupParams params) {
+  return safeApiCall(tag: 'Signup', () async {
+    final response = await remoteDataSource.signup(
+      SignupRequestBody(
+        username: params.username,
+        firstName: params.firstName,
+        lastName: params.lastName,
+        email: params.email,
+        password: params.password,
+        rePassword: params.rePassword,
+        phone: params.phone,
+      ),
+    );
+    return response.user.toEntity();
+  });
+}
 }
