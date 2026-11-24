@@ -164,7 +164,7 @@ class _SigninScreenState extends State<SigninScreen> {
                     DontHaveAccRow(
                       title: UiStrings.dontHaveAccount,
                       buttonText: UiStrings.signUp,
-                      onPressed: () => context.goNamed(PageRoutesName.signup),
+                      onPressed: () => context.pushNamed(PageRoutesName.signup),
                     ),
                   ],
                 ),

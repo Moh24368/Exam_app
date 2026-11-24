@@ -1,5 +1,4 @@
 import 'package:exam/config/di/di.dart';
-import 'package:exam/config/routes/page_routes_name.dart';
 import 'package:exam/config/validators/validations.dart';
 import 'package:exam/core/theme/ui_strings.dart';
 import 'package:exam/features/auth/presentation/signup/cubit/signup_state.dart';
@@ -54,14 +53,14 @@ class _SignupScreenState extends State<SignupScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text(UiStrings.accCraetedSuccessfuly)),
             );
-            context.goNamed(PageRoutesName.login);
+            context.pop();
           }
         },
         child: Scaffold(
           appBar: AppBar(
             title: Text(UiStrings.signUp),
             leading: IconButton(
-              onPressed: () => context.goNamed(PageRoutesName.login),
+              onPressed: () => context.pop(),
               icon: Icon(Icons.arrow_back_ios_new),
             ),
           ),
@@ -206,7 +205,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     DontHaveAccRow(
                       title: UiStrings.alreadyHaveAcc,
                       buttonText: UiStrings.login,
-                      onPressed: () => context.goNamed(PageRoutesName.login),
+                      onPressed: () => context.pop(),
                     ),
                   ],
                 ),

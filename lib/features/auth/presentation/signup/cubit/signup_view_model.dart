@@ -1,5 +1,6 @@
 import 'package:exam/config/base_response/base_response.dart';
 import 'package:exam/config/base_state/base_state.dart';
+import 'package:exam/features/auth/domain/entities/signup_params.dart';
 import 'package:exam/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:exam/features/auth/presentation/signup/cubit/signup_state.dart';
 import 'package:exam/features/auth/presentation/signup/cubit/signup_event.dart';
@@ -23,13 +24,15 @@ class SignupViewModel extends Cubit<SignupState> {
     emit(state.copyWith(signupState: const BaseState(isLoading: true)));
 
     final result = await _signupUseCase(
-      username: event.username,
-      firstName: event.firstName,
-      lastName: event.lastName,
-      email: event.email,
-      password: event.password,
-      rePassword: event.rePassword,
-      phone: event.phone,
+      SignupParams(
+        username: event.username,
+        firstName: event.firstName,
+        lastName: event.lastName,
+        email: event.email,
+        password: event.password,
+        rePassword: event.rePassword,
+        phone: event.phone,
+      ),
     );
 
     switch (result) {

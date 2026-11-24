@@ -9,7 +9,9 @@ Future<BaseResponse<T>> safeApiCall<T>(
     final data = await call();
     return SuccessBaseResponse(data: data);
   } catch (error, stackTrace) {
-    debugPrint('$tag Error: $error\n$stackTrace');
+    if (kDebugMode) {
+      debugPrint('$tag Error: $error\n$stackTrace');
+    }
     return ErrorBaseResponse(errorObj: error);
   }
 }
