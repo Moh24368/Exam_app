@@ -19,6 +19,8 @@ import '../../features/auth/data/datasources/remote/forgot_password_fake_data_so
     as _i300;
 import '../../features/auth/data/datasources/remote/forgot_password_remote_data_source.dart'
     as _i509;
+import '../../features/auth/data/datasources/remote/forgot_password_remote_data_source_impl.dart'
+    as _i930;
 import '../../features/auth/data/repositories/forgot_password_repository_impl.dart'
     as _i865;
 import '../../features/auth/domain/repositories/forgot_password_repository.dart'
@@ -50,7 +52,7 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i509.ForgotPasswordRemoteDataSource>(
       () =>
-          _i509.ForgotPasswordRemoteDataSourceImpl(gh<_i576.AuthApiService>()),
+          _i930.ForgotPasswordRemoteDataSourceImpl(gh<_i576.AuthApiService>()),
       registerFor: {_prod},
     );
     gh.factory<_i432.ForgotPasswordRepository>(
