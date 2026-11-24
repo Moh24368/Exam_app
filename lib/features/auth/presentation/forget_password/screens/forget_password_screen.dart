@@ -28,19 +28,15 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     super.dispose();
   }
 
-  String? _emailError(String email) {
-    if (email.isEmpty || AppValidators.isValidEmail(email)) return null;
-    return AppStrings.emailInvalid;
-  }
+  void _onSendEmailChanged(BuildContext context, ForgotPasswordState state) {
+    final sendEmail = state.sendEmailState;
+    if (sendEmail.isLoading) return;
 
-  void _onStateChanged(BuildContext context, ForgotPasswordState state) {
-    if (!(ModalRoute.of(context)?.isCurrent ?? false)) return;
-
-    if (state.errorMessage != null) {
+    if (sendEmail.errMsg != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(state.errorMessage!)),
+        SnackBar(content: Text(sendEmail.errMsg!)),
       );
-    } else if (state.step == ForgotPasswordStep.verifyCode) {
+    } else if (sendEmail.data != null) {
       context.push(
         PageRoutePaths.verificationcode,
         extra: context.read<ForgotPasswordCubit>(),
@@ -78,7 +74,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   valueListenable: _emailController,
                   builder: (context, value, _) {
                     final String email = value.text.trim();
-                    final bool isValid = AppValidators.isValidEmail(email);
+                    final String? emailError =
+                        AppValidators.validateEmail(email);
+                    final bool isValid = email.isNotEmpty && emailError == null;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -88,22 +86,27 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                           decoration: InputDecoration(
                             labelText: AppStrings.emailLabel,
                             hintText: AppStrings.emailHint,
-                            errorText: _emailError(email),
+                            errorText: emailError,
                           ),
                         ),
                         const SizedBox(height: AppSizes.spaceXxl),
                         BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
                           listenWhen: (prev, curr) =>
-                              prev.isLoading && !curr.isLoading,
-                          listener: _onStateChanged,
+                              prev.sendEmailState != curr.sendEmailState,
+                          buildWhen: (prev, curr) =>
+                              prev.sendEmailState.isLoading !=
+                              curr.sendEmailState.isLoading,
+                          listener: _onSendEmailChanged,
                           builder: (context, state) {
+                            final bool isLoading =
+                                state.sendEmailState.isLoading;
                             return ElevatedButton(
-                              onPressed: isValid && !state.isLoading
+                              onPressed: isValid && !isLoading
                                   ? () => context
                                       .read<ForgotPasswordCubit>()
                                       .doIntent(SendEmailIntent(email))
                                   : null,
-                              child: state.isLoading
+                              child: isLoading
                                   ? const SizedBox.square(
                                       dimension: 20,
                                       child: CircularProgressIndicator(

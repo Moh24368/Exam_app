@@ -30,15 +30,20 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     super.dispose();
   }
 
-  void _onStateChanged(BuildContext context, ForgotPasswordState state) {
-    if (!(ModalRoute.of(context)?.isCurrent ?? false)) return;
+  void _onResetPasswordChanged(
+    BuildContext context,
+    ForgotPasswordState state,
+  ) {
+    final reset = state.resetPasswordState;
+    if (reset.isLoading) return;
 
-    if (state.errorMessage != null) {
+    if (reset.errMsg != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(state.errorMessage!)),
+        SnackBar(content: Text(reset.errMsg!)),
       );
-    } else if (state.step == ForgotPasswordStep.done) {
-      context.go(PageRoutePaths.forgetpassword);
+    } else if (reset.data != null) {
+      // TODO: login route is added in the sign in PR (feature/sigin)
+      context.go(PageRoutePaths.login);
     }
   }
 
@@ -60,10 +65,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               builder: (context, _) {
                 final String password = _passwordController.text;
                 final String confirm = _confirmController.text;
-                final bool isPasswordValid =
-                    AppValidators.isValidPassword(password);
-                final bool canSubmit =
-                    isPasswordValid && confirm == password;
+                final String? passwordError =
+                    AppValidators.validatePassword(password);
+                final String? confirmError =
+                    AppValidators.validateConfirmPassword(confirm, password);
+                final bool canSubmit = password.isNotEmpty &&
+                    confirm.isNotEmpty &&
+                    passwordError == null &&
+                    confirmError == null;
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -87,9 +96,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       decoration: InputDecoration(
                         labelText: AppStrings.newPasswordLabel,
                         hintText: AppStrings.newPasswordHint,
-                        errorText: password.isEmpty || isPasswordValid
-                            ? null
-                            : AppStrings.passwordInvalid,
+                        errorText: passwordError,
                       ),
                     ),
                     const SizedBox(height: AppSizes.spaceMd),
@@ -99,24 +106,27 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       decoration: InputDecoration(
                         labelText: AppStrings.confirmPasswordLabel,
                         hintText: AppStrings.confirmPasswordHint,
-                        errorText: confirm.isEmpty || confirm == password
-                            ? null
-                            : AppStrings.passwordsNotMatch,
+                        errorText: confirmError,
                       ),
                     ),
                     const SizedBox(height: AppSizes.spaceXxl),
                     BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
                       listenWhen: (prev, curr) =>
-                          prev.isLoading && !curr.isLoading,
-                      listener: _onStateChanged,
+                          prev.resetPasswordState != curr.resetPasswordState,
+                      buildWhen: (prev, curr) =>
+                          prev.resetPasswordState.isLoading !=
+                          curr.resetPasswordState.isLoading,
+                      listener: _onResetPasswordChanged,
                       builder: (context, state) {
+                        final bool isLoading =
+                            state.resetPasswordState.isLoading;
                         return ElevatedButton(
-                          onPressed: canSubmit && !state.isLoading
+                          onPressed: canSubmit && !isLoading
                               ? () => context
                                   .read<ForgotPasswordCubit>()
                                   .doIntent(ResetPasswordIntent(password))
                               : null,
-                          child: state.isLoading
+                          child: isLoading
                               ? const SizedBox.square(
                                   dimension: 20,
                                   child: CircularProgressIndicator(

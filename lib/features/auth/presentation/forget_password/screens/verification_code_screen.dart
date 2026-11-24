@@ -18,14 +18,21 @@ class VerificationCodeScreen extends StatelessWidget {
 
   static const int _codeLength = 6;
 
-  void _onStateChanged(BuildContext context, ForgotPasswordState state) {
-    if (!(ModalRoute.of(context)?.isCurrent ?? false)) return;
-
-    if (state.errorMessage == null &&
-        state.step == ForgotPasswordStep.resetPassword) {
+  void _onVerifyCodeChanged(BuildContext context, ForgotPasswordState state) {
+    final verify = state.verifyCodeState;
+    if (!verify.isLoading && verify.errMsg == null && verify.data != null) {
       context.push(
         PageRoutePaths.resetpassword,
         extra: context.read<ForgotPasswordCubit>(),
+      );
+    }
+  }
+
+  void _onResendCodeChanged(BuildContext context, ForgotPasswordState state) {
+    final resend = state.resendCodeState;
+    if (!resend.isLoading && resend.errMsg != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(resend.errMsg!)),
       );
     }
   }
@@ -57,12 +64,14 @@ class VerificationCodeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSizes.spaceLg),
                 BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
-                  listenWhen: (prev, curr) => prev.isLoading && !curr.isLoading,
-                  listener: _onStateChanged,
+                  listenWhen: (prev, curr) =>
+                      prev.verifyCodeState != curr.verifyCodeState,
+                  buildWhen: (prev, curr) =>
+                      prev.verifyCodeState != curr.verifyCodeState,
+                  listener: _onVerifyCodeChanged,
                   builder: (context, state) {
-                    final bool hasError =
-                        state.step == ForgotPasswordStep.verifyCode &&
-                            state.errorMessage != null;
+                    final bool hasError = state.verifyCodeState.errMsg != null;
+                    final bool isLoading = state.verifyCodeState.isLoading;
                     return LayoutBuilder(
                       builder: (context, constraints) {
                         final double boxWidth = (constraints.maxWidth -
@@ -73,7 +82,7 @@ class VerificationCodeScreen extends StatelessWidget {
                           child: Pinput(
                             length: _codeLength,
                             autofocus: true,
-                            enabled: !state.isLoading,
+                            enabled: !isLoading,
                             separatorBuilder: (index) =>
                                 const SizedBox(width: AppSizes.otpGap),
                             defaultPinTheme: AppPinTheme.defaultTheme(boxWidth),
@@ -119,11 +128,32 @@ class VerificationCodeScreen extends StatelessWidget {
                       style: AppTextStyle.bodyStyle,
                     ),
                     const SizedBox(width: AppSizes.spaceXs),
-                    TextButton(
-                      onPressed: () => context
-                          .read<ForgotPasswordCubit>()
-                          .doIntent(ResendCodeIntent()),
-                      child: const Text(AppStrings.resend),
+                    BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
+                      listenWhen: (prev, curr) =>
+                          prev.resendCodeState != curr.resendCodeState,
+                      buildWhen: (prev, curr) =>
+                          prev.resendCodeState.isLoading !=
+                          curr.resendCodeState.isLoading,
+                      listener: _onResendCodeChanged,
+                      builder: (context, state) {
+                        final bool isResending =
+                            state.resendCodeState.isLoading;
+                        return TextButton(
+                          onPressed: isResending
+                              ? null
+                              : () => context
+                                  .read<ForgotPasswordCubit>()
+                                  .doIntent(ResendCodeIntent()),
+                          child: isResending
+                              ? const SizedBox.square(
+                                  dimension: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : const Text(AppStrings.resend),
+                        );
+                      },
                     ),
                   ],
                 ),
