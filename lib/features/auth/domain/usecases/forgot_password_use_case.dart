@@ -1,33 +1,39 @@
-import 'package:exam/config/network/api_result.dart';
-import 'package:exam/features/auth/domain/repositories/forgot_password_repository.dart';
+import 'package:exam/config/base_response/base_response.dart';
+import 'package:exam/features/auth/domain/repositories/auth_repo.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class ForgotPasswordUseCase {
-  final ForgotPasswordRepository _repository;
-  ForgotPasswordUseCase(this._repository);
+  final AuthRepo authRepo;
 
-  Future<ApiResult<String>> call(String email) =>
-      _repository.forgotPassword(email);
+  ForgotPasswordUseCase(this.authRepo);
+
+  Future<BaseResponse<String>> call(String email) {
+    return authRepo.forgotPassword(email);
+  }
 }
 
 @injectable
 class VerifyResetCodeUseCase {
-  final ForgotPasswordRepository _repository;
-  VerifyResetCodeUseCase(this._repository);
+  final AuthRepo authRepo;
 
-  Future<ApiResult<String>> call(String code) =>
-      _repository.verifyResetCode(code);
+  VerifyResetCodeUseCase(this.authRepo);
+
+  Future<BaseResponse<String>> call(String code) {
+    return authRepo.verifyResetCode(code);
+  }
 }
 
 @injectable
 class ResetPasswordUseCase {
-  final ForgotPasswordRepository _repository;
-  ResetPasswordUseCase(this._repository);
+  final AuthRepo authRepo;
 
-  Future<ApiResult<String>> call({
+  ResetPasswordUseCase(this.authRepo);
+
+  Future<BaseResponse<String>> call({
     required String email,
     required String newPassword,
-  }) =>
-      _repository.resetPassword(email: email, newPassword: newPassword);
+  }) {
+    return authRepo.resetPassword(email: email, newPassword: newPassword);
+  }
 }

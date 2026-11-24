@@ -1,17 +1,19 @@
 import 'package:dio/dio.dart';
-import 'package:exam/features/auth/data/datasources/remote/forgot_password_remote_data_source.dart';
+import 'package:exam/features/auth/data/datasources/remote/auth_remote_datasources.dart';
+import 'package:exam/features/auth/data/models/request/forgot_password_request.dart';
 import 'package:exam/features/auth/data/models/response/forgot_password_response.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable(as: ForgotPasswordRemoteDataSource, env: [Environment.dev])
-class ForgotPasswordFakeDataSource implements ForgotPasswordRemoteDataSource {
+@Injectable(as: AuthRemoteDataSource, env: [Environment.dev])
+class ForgotPasswordFakeDataSource implements AuthRemoteDataSource {
   static const String _validCode = '123456';
   static const Duration _delay = Duration(seconds: 1);
 
   @override
-  Future<ForgotPasswordResponse> forgotPassword(String email) async {
+  Future<ForgotPasswordResponse> forgotPassword(
+    ForgotPasswordRequest request,
+  ) async {
     await Future.delayed(_delay);
-    if (!email.contains('@')) throw _error('There is no account with this email');
     return const ForgotPasswordResponse(
       message: 'success',
       info: 'OTP sent to your email',
@@ -19,30 +21,25 @@ class ForgotPasswordFakeDataSource implements ForgotPasswordRemoteDataSource {
   }
 
   @override
-  Future<VerifyResetCodeResponse> verifyResetCode(String code) async {
+  Future<VerifyResetCodeResponse> verifyResetCode(
+    VerifyResetCodeRequest request,
+  ) async {
     await Future.delayed(_delay);
-    if (code != _validCode) throw _error('Reset code is invalid or has expired');
+    if (request.resetCode != _validCode) throw _badRequest();
     return const VerifyResetCodeResponse(status: 'Success');
   }
 
   @override
   Future<ResetPasswordResponse> resetPassword(
-    String email,
-    String newPassword,
+    ResetPasswordRequest request,
   ) async {
     await Future.delayed(_delay);
-    return const ResetPasswordResponse(
-      message: 'success',
-      token: 'fake-token',
-    );
+    return const ResetPasswordResponse(message: 'success', token: 'fake-token');
   }
 
-  DioException _error(String message) => DioException(
+  DioException _badRequest() => DioException(
         requestOptions: RequestOptions(),
-        response: Response(
-          requestOptions: RequestOptions(),
-          statusCode: 400,
-          data: {'message': message},
-        ),
+        type: DioExceptionType.badResponse,
+        response: Response(requestOptions: RequestOptions(), statusCode: 400),
       );
 }

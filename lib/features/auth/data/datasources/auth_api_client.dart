@@ -5,26 +5,26 @@ import 'package:exam/features/auth/data/models/response/forgot_password_response
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'auth_api_service.g.dart';
+part 'auth_api_client.g.dart';
 
 @lazySingleton
-@RestApi(baseUrl: ApiConstants.baseUrl)
-abstract class AuthApiService {
+@RestApi()
+abstract class AuthApiClient {
   @factoryMethod
-  factory AuthApiService(Dio dio) = _AuthApiService;
+  factory AuthApiClient(Dio dio) = _AuthApiClient;
 
   @POST(ApiConstants.forgotPassword)
   Future<ForgotPasswordResponse> forgotPassword(
-    @Body() ForgotPasswordRequest body,
+    @Body() ForgotPasswordRequest request,
   );
 
   @POST(ApiConstants.verifyResetCode)
   Future<VerifyResetCodeResponse> verifyResetCode(
-    @Body() VerifyResetCodeRequest body,
+    @Body() VerifyResetCodeRequest request,
   );
 
   @PUT(ApiConstants.resetPassword)
   Future<ResetPasswordResponse> resetPassword(
-    @Body() ResetPasswordRequest body,
+    @Body() ResetPasswordRequest request,
   );
 }

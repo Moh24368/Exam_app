@@ -1,40 +1,46 @@
-import 'package:dio/dio.dart';
-import 'package:exam/config/network/api_result.dart';
-import 'package:exam/features/auth/data/datasources/remote/forgot_password_remote_data_source.dart';
-import 'package:exam/features/auth/domain/repositories/forgot_password_repository.dart';
+import 'package:exam/config/base_response/base_response.dart';
+import 'package:exam/config/base_response/safe_api_call.dart';
+import 'package:exam/features/auth/data/datasources/remote/auth_remote_datasources.dart';
+import 'package:exam/features/auth/data/models/request/forgot_password_request.dart';
+import 'package:exam/features/auth/domain/repositories/auth_repo.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable(as: ForgotPasswordRepository)
-class ForgotPasswordRepositoryImpl implements ForgotPasswordRepository {
-  final ForgotPasswordRemoteDataSource _remote;
-  ForgotPasswordRepositoryImpl(this._remote);
+@Injectable(as: AuthRepo)
+class AuthRepoImpl implements AuthRepo {
+  final AuthRemoteDataSource remoteDataSource;
+
+  AuthRepoImpl(this.remoteDataSource);
 
   @override
-  Future<ApiResult<String>> forgotPassword(String email) =>
-      _safeCall(() async => (await _remote.forgotPassword(email)).info ?? '');
+  Future<BaseResponse<String>> forgotPassword(String email) {
+    return safeApiCall(tag: 'ForgotPassword', () async {
+      final response = await remoteDataSource.forgotPassword(
+        ForgotPasswordRequest(email: email),
+      );
+      return response.info ?? '';
+    });
+  }
 
   @override
-  Future<ApiResult<String>> verifyResetCode(String code) =>
-      _safeCall(() async => (await _remote.verifyResetCode(code)).status ?? '');
+  Future<BaseResponse<String>> verifyResetCode(String code) {
+    return safeApiCall(tag: 'VerifyResetCode', () async {
+      final response = await remoteDataSource.verifyResetCode(
+        VerifyResetCodeRequest(resetCode: code),
+      );
+      return response.status ?? '';
+    });
+  }
 
   @override
-  Future<ApiResult<String>> resetPassword({
+  Future<BaseResponse<String>> resetPassword({
     required String email,
     required String newPassword,
-  }) =>
-      _safeCall(
-        () async => (await _remote.resetPassword(email, newPassword)).message ?? '',
+  }) {
+    return safeApiCall(tag: 'ResetPassword', () async {
+      final response = await remoteDataSource.resetPassword(
+        ResetPasswordRequest(email: email, newPassword: newPassword),
       );
-
-  Future<ApiResult<String>> _safeCall(Future<String> Function() call) async {
-    try {
-      return ApiSuccess(await call());
-    } on DioException catch (e) {
-      final data = e.response?.data;
-      final message = data is Map && data['message'] != null
-          ? data['message'].toString()
-          : 'Something went wrong, please try again';
-      return ApiError(message);
-    }
+      return response.message ?? '';
+    });
   }
 }
