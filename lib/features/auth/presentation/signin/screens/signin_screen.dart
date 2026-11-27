@@ -115,10 +115,7 @@ class _SigninScreenState extends State<SigninScreen> {
                         ),
                         Spacer(),
                         TextButton(
-                          onPressed: () {
-                            // Navigate to the forgot password page
-                            // context.goNamed(PageRoutesName.forgotPassword);
-                          },
+                          onPressed: () => context.pushNamed(PageRoutesName.forgetpassword),
                           child: Text(
                             UiStrings.forgotPassword,
                             style: TextStyle(fontSize: 13.sp),

@@ -10,6 +10,14 @@ abstract interface class AuthRepo {
     required bool rememberMe,
   });
 
-// domain/repositories/auth_repo.dart
-Future<BaseResponse<UserEntity>> signup(SignupParams params);
+  Future<BaseResponse<UserEntity>> signup(SignupParams params);
+
+  Future<BaseResponse<String>> forgotPassword(String email);
+
+  Future<BaseResponse<String>> verifyResetCode(String code);
+
+  Future<BaseResponse<String>> resetPassword({
+    required String email,
+    required String newPassword,
+  });
 }
