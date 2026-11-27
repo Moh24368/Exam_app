@@ -1,9 +1,9 @@
 import 'package:exam/config/routes/app_route_paths.dart';
 import 'package:exam/config/validators/validations.dart';
-import 'package:exam/core/constants/app_strings.dart';
 import 'package:exam/core/theme/app_colors.dart';
 import 'package:exam/core/theme/app_sizes.dart';
 import 'package:exam/core/theme/app_text_style.dart';
+import 'package:exam/core/theme/ui_strings.dart';
 import 'package:exam/features/auth/presentation/forget_password/cubit/forgot_password_cubit.dart';
 import 'package:exam/features/auth/presentation/forget_password/cubit/forgot_password_intent.dart';
 import 'package:exam/features/auth/presentation/forget_password/cubit/forgot_password_state.dart';
@@ -38,9 +38,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     if (reset.isLoading) return;
 
     if (reset.errMsg != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(reset.errMsg!)),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(reset.errMsg!)));
     } else if (reset.data != null) {
       // TODO: login route is added in the sign in PR (feature/sigin)
       context.go(PageRoutePaths.login);
@@ -50,7 +49,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(title: AppStrings.passwordAppBarTitle),
+      appBar: const BackAppBar(title: UiStrings.passwordAppBarTitle),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -65,11 +64,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               builder: (context, _) {
                 final String password = _passwordController.text;
                 final String confirm = _confirmController.text;
-                final String? passwordError =
-                    AppValidators.validatePassword(password);
-                final String? confirmError =
-                    AppValidators.validateConfirmPassword(confirm, password);
-                final bool canSubmit = password.isNotEmpty &&
+                final String? passwordError = password.isEmpty
+                    ? null
+                    : AppValidators.password(password);
+                final String? confirmError = confirm.isEmpty
+                    ? null
+                    : AppValidators.confirmPassword(confirm, password);
+                final bool canSubmit =
+                    password.isNotEmpty &&
                     confirm.isNotEmpty &&
                     passwordError == null &&
                     confirmError == null;
@@ -79,13 +81,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   children: [
                     const SizedBox(height: AppSizes.spaceXl),
                     const Text(
-                      AppStrings.resetPasswordTitle,
+                      UiStrings.resetPasswordTitle,
                       textAlign: TextAlign.center,
                       style: AppTextStyle.titleStyle,
                     ),
                     const SizedBox(height: AppSizes.spaceMd),
                     const Text(
-                      AppStrings.resetPasswordSubtitle,
+                      UiStrings.resetPasswordSubtitle,
                       textAlign: TextAlign.center,
                       style: AppTextStyle.subtitleStyle,
                     ),
@@ -94,8 +96,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       controller: _passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
-                        labelText: AppStrings.newPasswordLabel,
-                        hintText: AppStrings.newPasswordHint,
+                        labelText: UiStrings.newPasswordLabel,
+                        hintText: UiStrings.newPasswordHint,
                         errorText: passwordError,
                       ),
                     ),
@@ -104,8 +106,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       controller: _confirmController,
                       obscureText: true,
                       decoration: InputDecoration(
-                        labelText: AppStrings.confirmPasswordLabel,
-                        hintText: AppStrings.confirmPasswordHint,
+                        labelText: UiStrings.confirmPasswordLabel,
+                        hintText: UiStrings.confirmPasswordHint,
                         errorText: confirmError,
                       ),
                     ),
@@ -123,8 +125,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         return ElevatedButton(
                           onPressed: canSubmit && !isLoading
                               ? () => context
-                                  .read<ForgotPasswordCubit>()
-                                  .doIntent(ResetPasswordIntent(password))
+                                    .read<ForgotPasswordCubit>()
+                                    .doIntent(ResetPasswordIntent(password))
                               : null,
                           child: isLoading
                               ? const SizedBox.square(
@@ -134,7 +136,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                     color: AppColors.white,
                                   ),
                                 )
-                              : const Text(AppStrings.continueLabel),
+                              : const Text(UiStrings.continueLabel),
                         );
                       },
                     ),

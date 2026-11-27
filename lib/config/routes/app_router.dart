@@ -5,41 +5,62 @@ import 'package:exam/features/auth/presentation/forget_password/cubit/forgot_pas
 import 'package:exam/features/auth/presentation/forget_password/screens/forget_password_screen.dart';
 import 'package:exam/features/auth/presentation/forget_password/screens/reset_password_screen.dart';
 import 'package:exam/features/auth/presentation/forget_password/screens/verification_code_screen.dart';
+import 'package:exam/features/auth/presentation/signin/screens/signin_screen.dart';
+import 'package:exam/features/auth/presentation/signup/screens/signup_screen.dart';
+import 'package:exam/features/home/presentation/screens/home_screen.dart';
+import 'package:exam/features/splash_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: PageRoutePaths.forgetpassword,
- routes: [
-  GoRoute(
-    name: PageRoutesName.forgetpassword,
-    path: PageRoutePaths.forgetpassword,
-    builder: (context, state) => BlocProvider(
-      create: (_) => getIt<ForgotPasswordCubit>(),
-      child: const ForgetPasswordScreen(),
+  initialLocation: PageRoutePaths.splash,
+  routes: [
+    GoRoute(
+      name: PageRoutesName.splash,
+      path: PageRoutePaths.splash,
+      builder: (context, state) => const SplashScreen(),
     ),
-  ),
-  GoRoute(
-    name: PageRoutesName.verificationcode,
-    path: PageRoutePaths.verificationcode,
-    builder: (context, state) => BlocProvider.value(
-      value: state.extra as ForgotPasswordCubit,
-      child: const VerificationCodeScreen(),
+    GoRoute(
+      name: PageRoutesName.login,
+      path: PageRoutePaths.login,
+      builder: (context, state) => const SigninScreen(),
     ),
-  ),
-  GoRoute(
-    name: PageRoutesName.resetpassword,
-    path: PageRoutePaths.resetpassword,
-    builder: (context, state) => BlocProvider.value(
-      value: state.extra as ForgotPasswordCubit,
-      child: const ResetPasswordScreen(),
+    GoRoute(
+      name: PageRoutesName.signup,
+      path: PageRoutePaths.signup,
+      builder: (context, state) => const SignupScreen(),
     ),
-  ),
-],
-  errorBuilder: (context, state) => Scaffold(
-    body: Center(
-      child: Text('Page not found: ${state.uri}'),
+    GoRoute(
+      name: PageRoutesName.forgetpassword,
+      path: PageRoutePaths.forgetpassword,
+      builder: (context, state) => BlocProvider(
+        create: (_) => getIt<ForgotPasswordCubit>(),
+        child: const ForgetPasswordScreen(),
+      ),
     ),
-  ),
+    GoRoute(
+      name: PageRoutesName.verificationcode,
+      path: PageRoutePaths.verificationcode,
+      builder: (context, state) => BlocProvider.value(
+        value: state.extra as ForgotPasswordCubit,
+        child: const VerificationCodeScreen(),
+      ),
+    ),
+    GoRoute(
+      name: PageRoutesName.resetpassword,
+      path: PageRoutePaths.resetpassword,
+      builder: (context, state) => BlocProvider.value(
+        value: state.extra as ForgotPasswordCubit,
+        child: const ResetPasswordScreen(),
+      ),
+    ),
+    GoRoute(
+      name: PageRoutesName.home,
+      path: PageRoutePaths.home,
+      builder: (context, state) => const HomeScreen(),
+    ),
+  ],
+  errorBuilder: (context, state) =>
+      Scaffold(body: Center(child: Text('Page not found: ${state.uri}'))),
 );

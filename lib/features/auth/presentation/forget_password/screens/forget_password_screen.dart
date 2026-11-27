@@ -1,9 +1,9 @@
 import 'package:exam/config/routes/app_route_paths.dart';
 import 'package:exam/config/validators/validations.dart';
-import 'package:exam/core/constants/app_strings.dart';
 import 'package:exam/core/theme/app_colors.dart';
 import 'package:exam/core/theme/app_sizes.dart';
 import 'package:exam/core/theme/app_text_style.dart';
+import 'package:exam/core/theme/ui_strings.dart';
 import 'package:exam/features/auth/presentation/forget_password/cubit/forgot_password_cubit.dart';
 import 'package:exam/features/auth/presentation/forget_password/cubit/forgot_password_intent.dart';
 import 'package:exam/features/auth/presentation/forget_password/cubit/forgot_password_state.dart';
@@ -33,9 +33,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     if (sendEmail.isLoading) return;
 
     if (sendEmail.errMsg != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(sendEmail.errMsg!)),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(sendEmail.errMsg!)));
     } else if (sendEmail.data != null) {
       context.push(
         PageRoutePaths.verificationcode,
@@ -47,7 +46,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(title: AppStrings.passwordAppBarTitle),
+      appBar: const BackAppBar(title: UiStrings.passwordAppBarTitle),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -59,13 +58,13 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               children: [
                 const SizedBox(height: AppSizes.spaceXl),
                 const Text(
-                  AppStrings.forgotPasswordTitle,
+                  UiStrings.forgotPasswordTitle,
                   textAlign: TextAlign.center,
                   style: AppTextStyle.titleStyle,
                 ),
                 const SizedBox(height: AppSizes.spaceMd),
                 const Text(
-                  AppStrings.forgotPasswordSubtitle,
+                  UiStrings.forgotPasswordSubtitle,
                   textAlign: TextAlign.center,
                   style: AppTextStyle.subtitleStyle,
                 ),
@@ -74,8 +73,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   valueListenable: _emailController,
                   builder: (context, value, _) {
                     final String email = value.text.trim();
-                    final String? emailError =
-                        AppValidators.validateEmail(email);
+                    final String? emailError = email.isEmpty
+                        ? null
+                        : AppValidators.email(email);
                     final bool isValid = email.isNotEmpty && emailError == null;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -84,8 +84,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
-                            labelText: AppStrings.emailLabel,
-                            hintText: AppStrings.emailHint,
+                            labelText: UiStrings.emailLabel,
+                            hintText: UiStrings.emailHint,
                             errorText: emailError,
                           ),
                         ),
@@ -103,8 +103,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                             return ElevatedButton(
                               onPressed: isValid && !isLoading
                                   ? () => context
-                                      .read<ForgotPasswordCubit>()
-                                      .doIntent(SendEmailIntent(email))
+                                        .read<ForgotPasswordCubit>()
+                                        .doIntent(SendEmailIntent(email))
                                   : null,
                               child: isLoading
                                   ? const SizedBox.square(
@@ -114,7 +114,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                                         color: AppColors.white,
                                       ),
                                     )
-                                  : const Text(AppStrings.continueLabel),
+                                  : const Text(UiStrings.continueLabel),
                             );
                           },
                         ),

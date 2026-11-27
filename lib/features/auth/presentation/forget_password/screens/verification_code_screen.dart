@@ -1,9 +1,9 @@
 import 'package:exam/config/routes/app_route_paths.dart';
-import 'package:exam/core/constants/app_strings.dart';
 import 'package:exam/core/theme/app_colors.dart';
 import 'package:exam/core/theme/app_sizes.dart';
 import 'package:exam/core/theme/app_text_style.dart';
-import 'package:exam/core/theme/app_theme.dart';
+import 'package:exam/core/theme/app_pin_theme.dart';
+import 'package:exam/core/theme/ui_strings.dart';
 import 'package:exam/features/auth/presentation/forget_password/cubit/forgot_password_cubit.dart';
 import 'package:exam/features/auth/presentation/forget_password/cubit/forgot_password_intent.dart';
 import 'package:exam/features/auth/presentation/forget_password/cubit/forgot_password_state.dart';
@@ -40,7 +40,7 @@ class VerificationCodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BackAppBar(title: AppStrings.passwordAppBarTitle),
+      appBar: const BackAppBar(title: UiStrings.passwordAppBarTitle),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -52,13 +52,13 @@ class VerificationCodeScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: AppSizes.spaceXl),
                 const Text(
-                  AppStrings.verificationCodeTitle,
+                  UiStrings.verificationCodeTitle,
                   textAlign: TextAlign.center,
                   style: AppTextStyle.titleStyle,
                 ),
                 const SizedBox(height: AppSizes.spaceMd),
                 const Text(
-                  AppStrings.verificationCodeSubtitle,
+                  UiStrings.verificationCodeSubtitle,
                   textAlign: TextAlign.center,
                   style: AppTextStyle.subtitleStyle,
                 ),
@@ -89,7 +89,7 @@ class VerificationCodeScreen extends StatelessWidget {
                             focusedPinTheme: AppPinTheme.focusedTheme(boxWidth),
                             errorPinTheme: AppPinTheme.errorTheme(boxWidth),
                             forceErrorState: hasError,
-                            errorText: hasError ? AppStrings.invalidCode : null,
+                            errorText: hasError ? UiStrings.invalidCode : null,
                             errorBuilder: (errorText, pin) => Padding(
                               padding: const EdgeInsets.only(
                                 top: AppSizes.spaceXs,
@@ -124,7 +124,7 @@ class VerificationCodeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      AppStrings.didNotReceiveCode,
+                      UiStrings.didNotReceiveCode,
                       style: AppTextStyle.bodyStyle,
                     ),
                     const SizedBox(width: AppSizes.spaceXs),
@@ -151,7 +151,7 @@ class VerificationCodeScreen extends StatelessWidget {
                                     strokeWidth: 2,
                                   ),
                                 )
-                              : const Text(AppStrings.resend),
+                              : const Text(UiStrings.resend),
                         );
                       },
                     ),
