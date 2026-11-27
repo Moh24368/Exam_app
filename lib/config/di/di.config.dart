@@ -15,12 +15,12 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
 import '../../features/auth/data/datasources/auth_api_client.dart' as _i552;
-import '../../features/auth/data/datasources/remote/auth_remote_datasources.dart'
-    as _i740;
-import '../../features/auth/data/datasources/remote/auth_remote_datasources_impl.dart'
-    as _i790;
 import '../../features/auth/data/datasources/remote/forgot_password_fake_data_source.dart'
     as _i300;
+import '../../features/auth/data/datasources/remote/forgot_password_remote_datasource.dart'
+    as _i522;
+import '../../features/auth/data/datasources/remote/forgot_password_remote_datasource_impl.dart'
+    as _i904;
 import '../../features/auth/data/repositories/auth_repo_impl.dart' as _i662;
 import '../../features/auth/domain/repositories/auth_repo.dart' as _i723;
 import '../../features/auth/domain/usecases/forgot_password_use_case.dart'
@@ -41,19 +41,19 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final dioModule = _$DioModule();
     gh.singleton<_i361.Dio>(() => dioModule.dio);
-    gh.factory<_i740.AuthRemoteDataSource>(
+    gh.factory<_i522.ForgotPasswordRemoteDataSource>(
       () => _i300.ForgotPasswordFakeDataSource(),
       registerFor: {_dev},
     );
     gh.lazySingleton<_i552.AuthApiClient>(
       () => _i552.AuthApiClient(gh<_i361.Dio>()),
     );
-    gh.factory<_i740.AuthRemoteDataSource>(
-      () => _i790.AuthRemoteDataSourceImpl(gh<_i552.AuthApiClient>()),
+    gh.factory<_i522.ForgotPasswordRemoteDataSource>(
+      () => _i904.ForgotPasswordRemoteDataSourceImpl(gh<_i552.AuthApiClient>()),
       registerFor: {_prod},
     );
     gh.factory<_i723.AuthRepo>(
-      () => _i662.AuthRepoImpl(gh<_i740.AuthRemoteDataSource>()),
+      () => _i662.AuthRepoImpl(gh<_i522.ForgotPasswordRemoteDataSource>()),
     );
     gh.factory<_i18.ForgotPasswordUseCase>(
       () => _i18.ForgotPasswordUseCase(gh<_i723.AuthRepo>()),

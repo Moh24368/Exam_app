@@ -1,14 +1,15 @@
 import 'package:exam/features/auth/data/datasources/auth_api_client.dart';
-import 'package:exam/features/auth/data/datasources/remote/auth_remote_datasources.dart';
+import 'package:exam/features/auth/data/datasources/remote/forgot_password_remote_datasource.dart';
 import 'package:exam/features/auth/data/models/request/forgot_password_request.dart';
 import 'package:exam/features/auth/data/models/response/forgot_password_response.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable(as: AuthRemoteDataSource, env: [Environment.prod])
-class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+@Injectable(as: ForgotPasswordRemoteDataSource, env: [Environment.prod])
+class ForgotPasswordRemoteDataSourceImpl
+    implements ForgotPasswordRemoteDataSource {
   final AuthApiClient authApiClient;
 
-  AuthRemoteDataSourceImpl(this.authApiClient);
+  ForgotPasswordRemoteDataSourceImpl(this.authApiClient);
 
   @override
   Future<ForgotPasswordResponse> forgotPassword(ForgotPasswordRequest request) {

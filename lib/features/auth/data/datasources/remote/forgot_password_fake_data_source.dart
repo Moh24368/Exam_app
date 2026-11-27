@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:exam/features/auth/data/datasources/remote/auth_remote_datasources.dart';
+import 'package:exam/features/auth/data/datasources/remote/forgot_password_remote_datasource.dart';
 import 'package:exam/features/auth/data/models/request/forgot_password_request.dart';
 import 'package:exam/features/auth/data/models/response/forgot_password_response.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable(as: AuthRemoteDataSource, env: [Environment.dev])
-class ForgotPasswordFakeDataSource implements AuthRemoteDataSource {
+@Injectable(as: ForgotPasswordRemoteDataSource, env: [Environment.dev])
+class ForgotPasswordFakeDataSource implements ForgotPasswordRemoteDataSource {
   static const String _validCode = '123456';
   static const Duration _delay = Duration(seconds: 1);
 
