@@ -61,7 +61,7 @@ abstract class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSizes.radiusRound),
         ),
-        textStyle: AppTextStyle.elevatedButtonText.copyWith(fontSize: 16.sp),
+        textStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
       ),
     ),
 

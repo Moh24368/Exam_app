@@ -41,7 +41,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(reset.errMsg!)));
     } else if (reset.data != null) {
-      // TODO: login route is added in the sign in PR (feature/sigin)
       context.go(PageRoutePaths.login);
     }
   }
